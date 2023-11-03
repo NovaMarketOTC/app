@@ -10,6 +10,9 @@ module.exports = {
       center: true,
     },
     extend: {
+      colors: {
+        "nova": "#0369a1",
+      }
     },
   },
   plugins: [],
