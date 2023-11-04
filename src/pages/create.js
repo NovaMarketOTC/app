@@ -3,20 +3,18 @@ import Navbar from '@/components/Navbar'
 import Footerbar from '@/components/Footerbar'
 import { Disclosure } from '@headlessui/react'
 import { ChevronUpIcon } from '@heroicons/react/20/solid'
-import { useAccount } from 'wagmi'
+import { useAccount, useContractWrite } from 'wagmi'
+
 import { ethers } from 'ethers'
 import { contract, rpc } from '@/utils/config'
+import MARKETABI from '@/utils/MARKETABI.json'
+import veNovaABI from '@/utils/ERC20ABI.json'
+
+
 // import { IExecDataProtector } from "@iexec/dataprotector";
 
 
 const create = () => {
-
-    const { address } = useAccount();
-    const provider = new ethers.JsonRpcProvider(rpc);
-
-    // const providerIexec = new ethers.JsonRpcProvider('https://bellecour.iex.ec');
-    // const dataProtector = new IExecDataProtector(providerIexec);
-
     const [tokenContract, setTokenContract] = useState('');
     const [tokenName, setTokenName] = useState('');
     const [tokenSymbol, setTokenSymbol] = useState('');
@@ -25,6 +23,76 @@ const create = () => {
     const [priceAsked, setPriceAsked] = useState(1);
     const [owner, setOwner] = useState('');
     const [userEmail, setUserEmail] = useState('');
+    const [isApproved, setIsApproved] = useState(false);
+
+
+    const { address } = useAccount();
+    const provider = new ethers.JsonRpcProvider(rpc);
+    const ABI = MARKETABI;
+    const contractAddr = contract;
+
+    const marketContractAddress = '0x60Aa941Cc863907c7eA8Ec51086fA4e39427Cd51';
+
+
+    function convertWeiToEther(weiAmount) {
+        if (weiAmount === 0n) {
+            return "0";
+        } else {
+            const etherValue = parseFloat(weiAmount) / 1e18;
+            return etherValue.toFixed(2);
+        }
+    }
+
+    // useEffect(() => {
+    //     async function checkApproval() {
+    //         if (address) {
+    //             const allowance = await tokenContract.allowance(address, marketContractAddress);
+    //             // const allowString = allowance.toString();
+    //             console.log("allow", allowance);
+    //             if (allowString !== '0') {
+    //                 setIsApproved(true);
+    //             } else {
+    //                 setIsApproved(false);
+    //             }
+    //         } else {
+    //             alert('You need to connect your wallet first to create an offer.')
+
+    //         }
+    //     }
+    //     checkApproval();
+    // }, []);
+
+    const { write: newSale, isLoading: isCreating, isError: isErrorCreating, isSuccess: isSuccessCreating } = useContractWrite({
+        address: contractAddr,
+        abi: ABI,
+        functionName: 'createSale',
+    });
+
+    async function createSale(tokenSymbol, tokenContract, tokenAmount, priceAsked) {
+        try {
+            newSale({ args: [tokenSymbol, tokenContract, tokenAmount, priceAsked], from: address, value: 0 });
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    const { write: approveToken, isLoading: isApproving, isError: isErrorApproving, isSuccess: isSuccessApproving } = useContractWrite({
+        address: tokenContract,
+        abi: veNovaABI,
+        functionName: 'approve',
+    });
+
+    async function approve(marketContractAddress, tokenAmount) {
+        try {
+            await approveToken({ args: [marketContractAddress, tokenAmount], from: address, value: 0 }); // Pass the tokenAmount as an argument
+            console.log('approve ok');
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    // const providerIexec = new ethers.JsonRpcProvider('https://bellecour.iex.ec');
+    // const dataProtector = new IExecDataProtector(providerIexec);
 
     async function getTokenData() {
         const contract = new ethers.Contract(tokenContract, [
@@ -38,18 +106,18 @@ const create = () => {
         setTokenDecimals(decimals.toString());
         setTokenSymbol(symbol);
     }
-
-    // function createSale() {
-    //     console.log('Send Email Here w/ IEXEC')
+    // async function protectData(userEmail) {
+    //     const protectedData = await dataProtector.protectData({
+    //         data: {
+    //             email: 'test@test.com'
+    //         }
+    //     })
     // }
 
-    async function protectData(userEmail) {
-        const protectedData = await dataProtector.protectData({
-            data: {
-                email: 'test@test.com'
-            }
-        })
-    }
+    // async function createSale(tokenName, tokenContract, tokenAmount, priceAsked) {
+    //     console.log(userEmail)
+    //     //ENCRYPT w/ IEXEC
+    // }
 
     useEffect(() => {
         setOwner(address);
@@ -61,13 +129,6 @@ const create = () => {
             getTokenData();
         }
     }, [tokenContract]);
-
-    async function createSale(tokenName, tokenContract, tokenAmount, priceAsked) {
-        console.log(userEmail)
-        //ENCRYPT w/ IEXEC
-
-
-    }
 
     return (
         <div>
@@ -100,7 +161,7 @@ const create = () => {
                                         <span className="pt-1 border-[1px] rounded-xl py-1 px-2 text-white border-nova bg-slate-700 flex mx-auto justify-center">{tokenDecimals}</span>
                                     </div>
                                 </div>
-                                <h3 className='pt-3 font-light text-xl text-white'>Price Estimation</h3>
+                                <h3 className='pt-3 font-light text-xl text-white'>Price Estimation / Asset Price</h3>
                                 <div className='pt-1 text-green-500'>
                                     PRICE ESTIMATION HERE USING CHRONICLE
                                 </div>
@@ -114,7 +175,8 @@ const create = () => {
                             type="number"
                             placeholder="Number of Tokens"
                             className="mt-1 border-[1px] rounded-xl py-1 px-2 text-white border-nova bg-slate-700"
-                            onChange={e => setTokenAmount(e.target.value)}
+                            // onChange={e => setTokenAmount(BigInt(parseFloat(e.target.value) / 1e18))}
+                            onChange={e => setTokenAmount(ethers.parseUnits(e.target.value))}
                             pattern="\d*"
                         />
                         <h3 className='pt-3 font-light text-xl text-white'>Desired Price</h3>
@@ -122,7 +184,7 @@ const create = () => {
                             type="number"
                             placeholder="Price in ETH"
                             className="mt-1 border-[1px] rounded-xl py-1 px-2 text-white border-nova bg-slate-700"
-                            onChange={e => setPriceAsked(e.target.value)}
+                            onChange={e => setPriceAsked(ethers.parseUnits(e.target.value))}
                             pattern="\d*"
                         />
                         <h3 className='pt-3 font-light text-xl text-white'>Your Email</h3>
@@ -134,13 +196,27 @@ const create = () => {
                                 onChange={e => setUserEmail(e.target.value)}
                             />
                             <button className='font-semibold w-1/3 mx-auto bg'>Encrypt Email</button>
-                        </div>
-                        <div className='pt-5'>
-                            <button onClick={() => createSale(tokenName, tokenContract, tokenAmount, priceAsked)} className='bg-gradient-to-r from-nova/60 via-nova/80 to-nova flex rounded-xl mx-auto font-semibold py-1 px-3'>Create Sale Offer</button>
-                        </div>
-                        {/* <div className='pt-5'>
+                            {/* <div className='pt-5'>
                             <button onClick={() => protectData()} className='bg-gradient-to-r from-nova/60 via-nova/80 to-nova flex rounded-xl mx-auto font-semibold py-1 px-3'>Test Protect Data</button>
                         </div> */}
+                        </div>
+                        <div className='pt-5'>
+                            <button
+                                onClick={() => {
+                                    if (isSuccessApproving) {
+                                        createSale(tokenSymbol, tokenContract, tokenAmount, priceAsked);
+                                    } else {
+                                        approve(tokenContract, tokenAmount);
+                                    }
+                                }}
+                                className={`bg-gradient-to-r from-nova/60 via-nova/80 to-nova flex rounded-xl mx-auto font-semibold py-1 px-3 ${isApproved ? 'text-green-500' : 'text-white'}`}
+                            >
+                                {isSuccessApproving ? `Create Sale Offer` : `Approve ${tokenSymbol} for NovaMarket`}
+                            </button>
+                            {isSuccessCreating && (
+                                <span className="mx-auto justify-center flex text-green-500 pt-2">The sales offer has been successfully added!</span>
+                            )}
+                        </div>
                     </div>
                 </div>
                 <div className="hidden sm:block px-10">

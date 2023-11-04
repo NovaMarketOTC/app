@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link'
+import { useRouter } from 'next/router';
 import { contract, rpc } from '@/utils/config'
 import MARKETABI from '@/utils/MARKETABI.json'
 import { ethers } from 'ethers'
 
 
 const LiveSales = () => {
+
+    const router = useRouter();
 
     const provider = new ethers.JsonRpcProvider(rpc);
     const ABI = MARKETABI;
@@ -34,11 +37,11 @@ const LiveSales = () => {
                 </div>
                 <div className='grid sm:grid-cols-6 grid-cols-2 pt-5 gap-5 mx-2'>
                     {salesData.slice(0, 12).map((sale, index) => (
-                        <div key={index} className='mx-auto justify-center border-nova border-[1px] rounded-lg py-1 p-8'>
-                            <span className='flex mx-auto justify-center sm:text-[15px] text-[10px]'>{(Number(sale.sale_amount) / 1e18).toFixed(2)} {sale.token_name}</span>
+                        <div key={index} className='mx-auto justify-center border-nova border-[1px] rounded-lg py-1 sm:w-[200px] sm:h-[100px] w-[150px] h-[85px]'>
+                            <span className='pt-1 flex mx-auto justify-center sm:text-[15px] text-[10px] font-semibold'>{(Number(sale.sale_amount) / 1e18).toFixed(2)} {sale.token_name}</span>
                             <span className='flex mx-auto justify-center sm:text-[15px] text-[10px]'>{(Number(sale.sale_price) / 1e18).toFixed(2)} ETH</span>
-                            <div className='mt-1 mb-1'>
-                                <button onClick={() => router.push(`/sales/${sale.id}`)} className='bg-gradient-to-r from-nova/60 via-nova/80 to-nova flex rounded-xl mx-auto font-semibold py- px-3'>
+                            <div className='mt-2 mb-2'>
+                                <button onClick={() => router.push(`/sales/${sale.id}`)} className='bg-gradient-to-r from-nova/60 via-nova/80 to-nova flex rounded-lg mx-auto font-light py- px-7'>
                                     Buy
                                 </button>
                             </div>
