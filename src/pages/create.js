@@ -24,6 +24,8 @@ const create = () => {
     const [owner, setOwner] = useState('');
     const [userEmail, setUserEmail] = useState('');
     const [isApproved, setIsApproved] = useState(false);
+    const [isLoadingData, setIsLoadingData] = useState(false);
+
 
 
     const { address } = useAccount();
@@ -95,6 +97,7 @@ const create = () => {
     // const dataProtector = new IExecDataProtector(providerIexec);
 
     async function getTokenData() {
+        setIsLoadingData(true);
         const contract = new ethers.Contract(tokenContract, [
             { constant: true, inputs: [], name: 'name', outputs: [{ name: '', type: 'string' }], type: 'function' },
             { constant: true, inputs: [], name: 'decimals', outputs: [{ name: '', type: 'uint8' }], type: 'function' },
@@ -105,6 +108,7 @@ const create = () => {
         setTokenName(name);
         setTokenDecimals(decimals.toString());
         setTokenSymbol(symbol);
+        setIsLoadingData(false);
     }
     // async function protectData(userEmail) {
     //     const protectedData = await dataProtector.protectData({
@@ -147,29 +151,40 @@ const create = () => {
                         <span className='pt-2 text-[8px] text-white mx-auto justify-center'>For exemple: 0xCc1a0e08Fa2d8371723Bb3B90331371581918466 (veNOVA)</span>
                         {tokenContract !== '' ? (
                             <>
-                                <div className='grid grid-cols-3 gap-2'>
-                                    <div>
-                                        <h3 className='pt-3 font-light text-xl text-white'>Name</h3>
-                                        <span className="pt-1 border-[1px] rounded-xl py-1 px-2 text-white border-nova bg-slate-700 flex mx-auto justify-center">{tokenName}</span>
+                                {isLoadingData ? ( // Check if data is loading
+                                    <div className="pt-3">
+                                        <div className="mx-auto justify-center flex animate-spin">
+                                            <svg width="20" height="20" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="#0369a1" d="M512 64a32 32 0 0 1 32 32v192a32 32 0 0 1-64 0V96a32 32 0 0 1 32-32zm0 640a32 32 0 0 1 32 32v192a32 32 0 1 1-64 0V736a32 32 0 0 1 32-32zm448-192a32 32 0 0 1-32 32H736a32 32 0 1 1 0-64h192a32 32 0 0 1 32 32zm-640 0a32 32 0 0 1-32 32H96a32 32 0 0 1 0-64h192a32 32 0 0 1 32 32zM195.2 195.2a32 32 0 0 1 45.248 0L376.32 331.008a32 32 0 0 1-45.248 45.248L195.2 240.448a32 32 0 0 1 0-45.248zm452.544 452.544a32 32 0 0 1 45.248 0L828.8 783.552a32 32 0 0 1-45.248 45.248L647.744 692.992a32 32 0 0 1 0-45.248zM828.8 195.264a32 32 0 0 1 0 45.184L692.992 376.32a32 32 0 0 1-45.248-45.248l135.808-135.808a32 32 0 0 1 45.248 0zm-452.544 452.48a32 32 0 0 1 0 45.248L240.448 828.8a32 32 0 0 1-45.248-45.248l135.808-135.808a32 32 0 0 1 45.248 0z" /></svg>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h3 className='pt-3 font-light text-xl text-white'>Symbol</h3>
-                                        <span className="pt-1 border-[1px] rounded-xl py-1 px-2 text-white border-nova bg-slate-700 flex mx-auto justify-center">{tokenSymbol}</span>
-                                    </div>
-                                    <div>
-                                        <h3 className='pt-3 font-light text-xl text-white'>Decimals</h3>
-                                        <span className="pt-1 border-[1px] rounded-xl py-1 px-2 text-white border-nova bg-slate-700 flex mx-auto justify-center">{tokenDecimals}</span>
-                                    </div>
-                                </div>
-                                <h3 className='pt-3 font-light text-xl text-white'>Price Estimation / Asset Price</h3>
-                                <div className='pt-1 text-green-500'>
-                                    PRICE ESTIMATION HERE USING CHRONICLE
-                                </div>
+                                ) : (
+                                    <>
+                                        <div className='grid grid-cols-3 gap-2'>
+                                            <div>
+                                                <h3 className='pt-3 font-light text-xl text-white'>Name</h3>
+                                                <span className="pt-1 border-[1px] rounded-xl py-1 px-2 text-white border-nova bg-slate-700 flex mx-auto justify-center">{tokenName}</span>
+                                            </div>
+                                            <div>
+                                                <h3 className='pt-3 font-light text-xl text-white'>Symbol</h3>
+                                                <span className="pt-1 border-[1px] rounded-xl py-1 px-2 text-white border-nova bg-slate-700 flex mx-auto justify-center">{tokenSymbol}</span>
+                                            </div>
+                                            <div>
+                                                <h3 className='pt-3 font-light text-xl text-white'>Decimals</h3>
+                                                <span className="pt-1 border-[1px] rounded-xl py-1 px-2 text-white border-nova bg-slate-700 flex mx-auto justify-center">{tokenDecimals}</span>
+                                            </div>
+                                        </div>
+                                        <h3 className='pt-3 font-light text-xl text-white'>Price Estimation / Asset Price</h3>
+                                        <div className='pt-1 text-green-500'>
+                                            PRICE ESTIMATION HERE USING CHRONICLE
+                                        </div>
+                                    </>
+                                )}
                             </>
                         ) : (
                             <>
                             </>
                         )}
+
                         <h3 className='pt-3 font-light text-xl text-white'>Number of Tokens to Sell</h3>
                         <input
                             type="number"
@@ -200,7 +215,7 @@ const create = () => {
                             <button onClick={() => protectData()} className='bg-gradient-to-r from-nova/60 via-nova/80 to-nova flex rounded-xl mx-auto font-semibold py-1 px-3'>Test Protect Data</button>
                         </div> */}
                         </div>
-                        <div className='pt-5'>
+                        <div className='pt-7'>
                             <button
                                 onClick={() => {
                                     if (isSuccessApproving) {
