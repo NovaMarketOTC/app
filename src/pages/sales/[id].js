@@ -35,9 +35,10 @@ const saleID = () => {
             console.log(sales)
         };
         fetchSalesDataForId();
+        getPriceForId();
     }, []);
 
-    const { write: newBuy, isLoading: isCreating, isError: isErrorCreating, isSuccess: isSuccessCreating } = useContractWrite({
+    const { write: newBuy, isLoading: isBuying, isError: isErrorBuying, isSuccess: isSuccessBuying } = useContractWrite({
         address: contractAddr,
         abi: ABI,
         functionName: 'buySale',
@@ -59,17 +60,28 @@ const saleID = () => {
                     {salesDataForId ? (
                         <>
                             <div>
-                                <span className='text-3xl font-semibold mx-auto flex justify-center'>BUY {salesDataForId.token_name}</span>
-                                <span className='pt-2 text-sm mx-auto flex justify-center'>Quantity : {(Number(salesDataForId.sale_amount) / 1e18).toFixed(2)} {salesDataForId.token_name}</span>
-                                <span className='pt-2 text-sm mx-auto flex justify-center'>Price Asked : {(Number(salesDataForId.sale_price) / 1e18).toFixed(2)} ETH</span>
-                                {/* {salesDataForId.owner} */}
-                                {/* {salesDataForId.already_sold} */}
-                                <div className="pt-3">
-                                    <button onClick={() => buySale(salesDataForId.id)} className='bg-gradient-to-r from-nova/60 via-nova/80 to-nova flex rounded-xl mx-auto font-semibold py-1 px-3'>Buy Offer</button>
-                                </div>
-                                <span className='text-xs mx-auto flex justify-center pt-3'>
-                                    Contract: <a href={`https://testnet-zkevm.polygonscan.com/address/${salesDataForId.token_contract}`} className='text-nova underline ml-2'>{salesDataForId.token_contract}</a>
-                                </span>
+                                {salesDataForId.already_sold ? (
+                                    <>
+                                        <span className="mx-auto justify-center flex text-red-500 pt-2">Already Sold!</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <span className='text-3xl font-semibold mx-auto flex justify-center'>BUY {salesDataForId.token_name}</span>
+                                        <span className='pt-2 text-sm mx-auto flex justify-center'>Quantity : {(Number(salesDataForId.sale_amount) / 1e18).toFixed(4)} {salesDataForId.token_name}</span>
+                                        <span className='pt-2 text-sm mx-auto flex justify-center'>Price Asked : {(Number(salesDataForId.sale_price) / 1e18).toFixed(4)} ETH</span>
+                                        {/* {salesDataForId.owner} */}
+                                        {/* {salesDataForId.already_sold} */}
+                                        <div className="pt-3">
+                                            <button onClick={() => buySale(salesDataForId.id)} className='bg-gradient-to-r from-nova/60 via-nova/80 to-nova flex rounded-xl mx-auto font-semibold py-1 px-3'>Buy Offer</button>
+                                        </div>
+                                        {isSuccessBuying && (
+                                            <span className="mx-auto justify-center flex text-green-500 pt-2">Tokens has been successfully bought!</span>
+                                        )}
+                                        <span className='text-xs mx-auto flex justify-center pt-3'>
+                                            Contract: <a href={`https://testnet-zkevm.polygonscan.com/address/${salesDataForId.token_contract}`} className='text-nova underline ml-2'>{salesDataForId.token_contract}</a>
+                                        </span>
+                                    </>
+                                )}
                             </div>
                         </>
                     ) : (
