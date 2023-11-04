@@ -5,7 +5,7 @@ import { Disclosure } from '@headlessui/react'
 import { ChevronUpIcon } from '@heroicons/react/20/solid'
 import { useAccount } from 'wagmi'
 import { ethers } from 'ethers'
-import { IExecDataProtector } from "@iexec/dataprotector";
+// import { IExecDataProtector } from "@iexec/dataprotector";
 
 
 const create = () => {
@@ -13,8 +13,8 @@ const create = () => {
     const { address } = useAccount();
     const provider = new ethers.JsonRpcProvider('https://rpc.public.zkevm-test.net');
 
-    const providerIexec = new ethers.JsonRpcProvider('https://bellecour.iex.ec');
-    const dataProtector = new IExecDataProtector(providerIexec);
+    // const providerIexec = new ethers.JsonRpcProvider('https://bellecour.iex.ec');
+    // const dataProtector = new IExecDataProtector(providerIexec);
 
     const [tokenContract, setTokenContract] = useState('');
     const [tokenName, setTokenName] = useState('');
@@ -58,13 +58,13 @@ const create = () => {
         //GET SALE ID
     }
 
-    // async function protectData(userEmail) {
-    //     const protectedData = await dataProtector.protectData({
-    //         data: {
-    //             email: 'test@test.com'
-    //         }
-    //     })
-    // }
+    async function protectData(userEmail) {
+        const protectedData = await dataProtector.protectData({
+            data: {
+                email: 'test@test.com'
+            }
+        })
+    }
 
     useEffect(() => {
         setOwner(address);
@@ -271,7 +271,7 @@ const create = () => {
             </div>
             <div className='pt-20'></div>
             <Footerbar />
-        </div >
+        </div>
     )
 }
 

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const [id] = () => {
+const saleID = () => {
     return (
         <div>
 
@@ -8,4 +8,4 @@ const [id] = () => {
     )
 }
 
-export default [id]
+export default saleID
