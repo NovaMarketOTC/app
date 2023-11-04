@@ -1,1 +1,312 @@
-[]
+[
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_saleId",
+                "type": "uint256"
+            }
+        ],
+        "name": "buySale",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "_token_name",
+                "type": "string"
+            },
+            {
+                "internalType": "address",
+                "name": "_token_contract",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_sale_amount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_sale_price",
+                "type": "uint256"
+            }
+        ],
+        "name": "createSale",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getAllSales",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "id",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "token_name",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "token_contract",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "sale_amount",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "sale_price",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "owner",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "bool",
+                        "name": "already_sold",
+                        "type": "bool"
+                    }
+                ],
+                "internalType": "struct NovaMarketV1.Sale[]",
+                "name": "",
+                "type": "tuple[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getNumberOfSales",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_saleId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getOwner",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_saleId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getSaleAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_saleId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getSalePrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_saleId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getTokenContract",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_saleId",
+                "type": "uint256"
+            }
+        ],
+        "name": "isSold",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "nextSaleId",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "sales",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "token_name",
+                "type": "string"
+            },
+            {
+                "internalType": "address",
+                "name": "token_contract",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "sale_amount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "sale_price",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "internalType": "bool",
+                "name": "already_sold",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "salesMap",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "token_name",
+                "type": "string"
+            },
+            {
+                "internalType": "address",
+                "name": "token_contract",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "sale_amount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "sale_price",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "internalType": "bool",
+                "name": "already_sold",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]

@@ -30,7 +30,7 @@ const Hero = () => {
             <div className="absolute inset-0 max-w-full mx-auto top-0 z-0 pointer-events-none">
                 <Particles
                     className="absolute top-10 bottom-10 inset-0 z-0 pointer-events-none h-[500px]"
-                    quantity={100}
+                    quantity={200}
                 />
             </div>
             <div className='pt-44 pt font-normal px-5 z-[-100]'>

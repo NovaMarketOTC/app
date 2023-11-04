@@ -5,13 +5,14 @@ import { Disclosure } from '@headlessui/react'
 import { ChevronUpIcon } from '@heroicons/react/20/solid'
 import { useAccount } from 'wagmi'
 import { ethers } from 'ethers'
+import { contract, rpc } from '@/utils/config'
 // import { IExecDataProtector } from "@iexec/dataprotector";
 
 
 const create = () => {
 
     const { address } = useAccount();
-    const provider = new ethers.JsonRpcProvider('https://rpc.public.zkevm-test.net');
+    const provider = new ethers.JsonRpcProvider(rpc);
 
     // const providerIexec = new ethers.JsonRpcProvider('https://bellecour.iex.ec');
     // const dataProtector = new IExecDataProtector(providerIexec);
@@ -24,16 +25,6 @@ const create = () => {
     const [priceAsked, setPriceAsked] = useState(1);
     const [owner, setOwner] = useState('');
     const [userEmail, setUserEmail] = useState('');
-
-    // struct Sales {
-    //     uint id;
-    //     string token_name;
-    //     address token_contract;
-    //     uint sale_amount;
-    //     uint sale_price;
-    //     address owner;
-    //     bool already_sold;
-    // }
 
     async function getTokenData() {
         const contract = new ethers.Contract(tokenContract, [
@@ -48,15 +39,9 @@ const create = () => {
         setTokenSymbol(symbol);
     }
 
-    // veNOVA => 0xCc1a0e08Fa2d8371723Bb3B90331371581918466
-
-    function createSale() {
-        console.log('Send Email Here w/ IEXEC')
-    }
-
-    async function getSaleID() {
-        //GET SALE ID
-    }
+    // function createSale() {
+    //     console.log('Send Email Here w/ IEXEC')
+    // }
 
     async function protectData(userEmail) {
         const protectedData = await dataProtector.protectData({
@@ -76,6 +61,13 @@ const create = () => {
             getTokenData();
         }
     }, [tokenContract]);
+
+    async function createSale(tokenName, tokenContract, tokenAmount, priceAsked) {
+        console.log(userEmail)
+        //ENCRYPT w/ IEXEC
+
+
+    }
 
     return (
         <div>
@@ -134,14 +126,17 @@ const create = () => {
                             pattern="\d*"
                         />
                         <h3 className='pt-3 font-light text-xl text-white'>Your Email</h3>
-                        <input
-                            type='email'
-                            placeholder="john@doe.com"
-                            className="mt-1 border-[1px] rounded-xl py-1 px-2 text-white border-nova bg-slate-700"
-                            onChange={e => setUserEmail(e.target.value)}
-                        />
+                        <div className='inline-flex'>
+                            <input
+                                type='email'
+                                placeholder="john@doe.com"
+                                className="mt-1 border-[1px] rounded-xl py-1 px-2 text-white border-nova bg-slate-700 w-2/3"
+                                onChange={e => setUserEmail(e.target.value)}
+                            />
+                            <button className='font-semibold w-1/3 mx-auto bg'>Encrypt Email</button>
+                        </div>
                         <div className='pt-5'>
-                            <button onClick={() => createSale()} className='bg-gradient-to-r from-nova/60 via-nova/80 to-nova flex rounded-xl mx-auto font-semibold py-1 px-3'>Create Sale Offer</button>
+                            <button onClick={() => createSale(tokenName, tokenContract, tokenAmount, priceAsked)} className='bg-gradient-to-r from-nova/60 via-nova/80 to-nova flex rounded-xl mx-auto font-semibold py-1 px-3'>Create Sale Offer</button>
                         </div>
                         {/* <div className='pt-5'>
                             <button onClick={() => protectData()} className='bg-gradient-to-r from-nova/60 via-nova/80 to-nova flex rounded-xl mx-auto font-semibold py-1 px-3'>Test Protect Data</button>

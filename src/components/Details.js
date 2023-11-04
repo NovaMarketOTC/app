@@ -14,8 +14,6 @@ const Details = () => {
         setDisplay('Buyers')
     }
 
-
-
     return (
         <div>
             <div className='flex mx-auto justify-center z-auto'>
