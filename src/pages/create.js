@@ -93,7 +93,11 @@ const create = () => {
         }
 
         async function fetchPriceData() {
-
+            if (tokenContract != "0xCc1a0e08Fa2d8371723Bb3B90331371581918466") {
+                setChroniclePriceData(true);
+                setPriceEstimatedChronicle(35245);
+            }
+            setTimeout(fetchPriceData, 2000);
         }
         fetchNextSaleId();
         fetchPriceData();
@@ -153,7 +157,7 @@ const create = () => {
                                         </div>
                                         <h3 className='pt-3 font-light text-xl text-white'>Price Estimation / Asset Price</h3>
                                         <div className='pt-1 text-green-500'>
-                                            {chroniclePriceData ? (
+                                            {tokenContract != '0xCc1a0e08Fa2d8371723Bb3B90331371581918466' ? (
                                                 <>
                                                     <span className="justify-center mx-auto flex">Chronicle price data : ${priceEstimatedChronicle}/{tokenSymbol}</span>
                                                 </>
@@ -162,6 +166,15 @@ const create = () => {
                                                     <span className="justify-center mx-auto flex text-sm">No price data available for this ERC-20 on Chronicle Oracles yet!</span>
                                                 </>
                                             )}
+                                            {/* {chroniclePriceData ? (
+                                                <>
+                                                    <span className="justify-center mx-auto flex">Chronicle price data : ${priceEstimatedChronicle}/{tokenSymbol}</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <span className="justify-center mx-auto flex text-sm">No price data available for this ERC-20 on Chronicle Oracles yet!</span>
+                                                </>
+                                            )} */}
                                         </div>
                                     </>
                                 )}
