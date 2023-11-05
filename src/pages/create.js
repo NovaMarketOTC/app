@@ -94,8 +94,11 @@ const create = () => {
 
         async function fetchPriceData() {
             if (tokenContract != "0xCc1a0e08Fa2d8371723Bb3B90331371581918466") {
+                const contract = new ethers.Contract(contractAddr, MARKETABI, provider);
+                const result = await contract.callExternalFunction();
+                let resultFixed = result.toString().slice(0, -18);
                 setChroniclePriceData(true);
-                setPriceEstimatedChronicle(35245);
+                setPriceEstimatedChronicle(resultFixed);
             }
             setTimeout(fetchPriceData, 2000);
         }
