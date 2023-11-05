@@ -3,7 +3,7 @@ import Navbar from '@/components/Navbar'
 import Footerbar from '@/components/Footerbar'
 import { contract, rpc } from '@/utils/config'
 import MARKETABI from '@/utils/MARKETABI.json'
-import { ethers } from 'ethers'
+import { ethers } from 'etherstest'
 import { useRouter } from 'next/router';
 
 

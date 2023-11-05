@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router';
 import { contract, rpc } from '@/utils/config'
 import MARKETABI from '@/utils/MARKETABI.json'
-import { ethers } from 'ethers'
+import { ethers } from 'etherstest'
 
 
 const LiveSales = () => {

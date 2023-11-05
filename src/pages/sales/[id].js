@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar';
 import Footerbar from '@/components/Footerbar';
 import { contract, rpc } from '@/utils/config'
 import MARKETABI from '@/utils/MARKETABI.json'
-import { ethers } from 'ethers'
+import { ethers } from 'etherstest'
 import { useAccount, useContractWrite } from 'wagmi'
 
 
@@ -76,6 +76,9 @@ const saleID = () => {
                                         </div>
                                         {isSuccessBuying && (
                                             <span className="mx-auto justify-center flex text-green-500 pt-2">Tokens has been successfully bought!</span>
+                                        )}
+                                        {isErrorBuying && (
+                                            <span className="mx-auto justify-center flex text-red-500 pt-2">Error buying sale offer!</span>
                                         )}
                                         <span className='text-xs mx-auto flex justify-center pt-3'>
                                             Contract: <a href={`https://testnet-zkevm.polygonscan.com/address/${salesDataForId.token_contract}`} className='text-nova underline ml-2'>{salesDataForId.token_contract}</a>
